@@ -1,17 +1,17 @@
 // src/components/CompanyDetail.js
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import JoblyApi from '../api'; // This should point to your API helper
+import JoblyApi from '../api'; // Make sure this is your API helper
 import JobCard from './JobCard'; // Component to display each job
 
 const CompanyDetail = () => {
-  const { companyName } = useParams();
+  const { handle } = useParams(); // Use 'handle' as the route parameter for the company
   const [company, setCompany] = useState(null);
 
   useEffect(() => {
     async function fetchCompany() {
       try {
-        const companyData = await JoblyApi.getCompany(companyName);
+        const companyData = await JoblyApi.getCompany(handle); // Fetch company using handle
         setCompany(companyData);
       } catch (err) {
         console.error('Error fetching company details:', err);
@@ -19,7 +19,7 @@ const CompanyDetail = () => {
     }
 
     fetchCompany();
-  }, [companyName]);
+  }, [handle]);
 
   if (!company) return <p>Loading...</p>;
 
@@ -29,14 +29,13 @@ const CompanyDetail = () => {
       <p>{company.description}</p>
       <div>
         <h3>Jobs at {company.name}</h3>
-        {company.jobs.map(job => (
-          <JobCard
-            key={job.id}
-            title={job.title}
-            salary={job.salary}
-            equity={job.equity}
-          />
-        ))}
+        {company.jobs.length ? (
+          company.jobs.map(job => (
+            <JobCard key={job.id} job={job} /> // Pass the whole job object to JobCard
+          ))
+        ) : (
+          <p>No jobs available.</p>
+        )}
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 import React from 'react';
 
 const companyDetails= () => {
-  return <h1>Detials!</h1>;
+  return <h1>Details!</h1>;
 };
 
-export default HomePage;
+export default companyDetails;

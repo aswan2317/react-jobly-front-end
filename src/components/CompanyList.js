@@ -1,7 +1,7 @@
 // src/components/CompanyList.js
 import React, { useState, useEffect } from 'react';
 import CompanyCard from './CompanyCard';
-import JoblyApi from '../api'; // This should point to your API helper
+import JoblyApi from '../api'; // Ensure this points to your API helper
 
 const CompanyList = () => {
   const [companies, setCompanies] = useState([]);
@@ -12,7 +12,7 @@ const CompanyList = () => {
     async function fetchCompanies() {
       try {
         const response = await JoblyApi.getCompanies(searchTerm);
-        setCompanies(response);
+        setCompanies(response.companies); // Accessing 'companies' array from response
       } catch (err) {
         console.error('Error fetching companies:', err);
       }
@@ -36,14 +36,18 @@ const CompanyList = () => {
         />
       </div>
       <div>
-        {companies.map(company => (
-          <CompanyCard
-            key={company.handle}
-            handle={company.handle}
-            name={company.name}
-            description={company.description}
-          />
-        ))}
+        {companies.length ? (
+          companies.map(company => (
+            <CompanyCard
+              key={company.handle}
+              handle={company.handle}
+              name={company.name}
+              description={company.description}
+            />
+          ))
+        ) : (
+          <p>No companies found.</p>
+        )}
       </div>
     </div>
   );
