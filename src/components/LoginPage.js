@@ -1,6 +1,7 @@
+// src/components/LoginPage.js
 import React, { useState } from 'react';
 
-function LoginPage() {
+function LoginPage({ login }) {
   const [formData, setFormData] = useState({ username: '', password: '' });
 
   const handleChange = (evt) => {
@@ -8,36 +9,29 @@ function LoginPage() {
     setFormData(fData => ({ ...fData, [name]: value }));
   };
 
-  const handleSubmit = (evt) => {
+  const handleSubmit = async (evt) => {
     evt.preventDefault();
-    // Handle login logic here
-    console.log('Login submitted:', formData);
+    login(formData);  // Use login function passed as a prop
   };
 
   return (
     <div>
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </div>
+        <input
+          type="text"
+          name="username"
+          value={formData.username}
+          onChange={handleChange}
+          placeholder="Username"
+        />
+        <input
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="Password"
+        />
         <button type="submit">Login</button>
       </form>
     </div>

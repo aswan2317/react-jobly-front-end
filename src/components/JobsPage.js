@@ -1,9 +1,9 @@
 // src/components/JobsPage.js
 import React, { useState, useEffect } from 'react';
 import JobCard from './JobCard';
-import JoblyApi from '../api'; // API helper
+import JoblyApi from '../api';  // API helper
 
-const JobsPage = () => {
+const JobsPage = ({ currentUser }) => {
   const [jobs, setJobs] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -42,21 +42,17 @@ const JobsPage = () => {
       {isLoading ? (
         <p>Loading jobs...</p>
       ) : (
-        <div>
-          {jobs.length ? (
-            jobs.map(job => (
-              <JobCard
-                key={job.id}
-                title={job.title}
-                salary={job.salary}
-                equity={job.equity}
-                companyName={job.companyName}
-              />
-            ))
-          ) : (
-            <p>No jobs found</p>
-          )}
-        </div>
+        jobs.map(job => (
+          <JobCard
+            key={job.id}
+            id={job.id}
+            title={job.title}
+            salary={job.salary}
+            equity={job.equity}
+            companyName={job.companyName}  // Display the company name, if available
+            applied={currentUser && currentUser.jobsApplied.includes(job.id)}  // Check if user applied
+          />
+        ))
       )}
     </div>
   );

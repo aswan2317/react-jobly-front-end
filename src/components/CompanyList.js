@@ -7,17 +7,15 @@ const CompanyList = () => {
   const [companies, setCompanies] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Fetch companies when the component loads or when searchTerm changes
   useEffect(() => {
     async function fetchCompanies() {
       try {
         const response = await JoblyApi.getCompanies(searchTerm);
-        setCompanies(response.companies); // Accessing 'companies' array from response
+        setCompanies(response);
       } catch (err) {
         console.error('Error fetching companies:', err);
       }
     }
-
     fetchCompanies();
   }, [searchTerm]);
 
@@ -27,28 +25,24 @@ const CompanyList = () => {
 
   return (
     <div className="CompanyList">
-      <div>
-        <input
-          type="text"
-          placeholder="Search companies..."
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
-      </div>
-      <div>
-        {companies.length ? (
-          companies.map(company => (
-            <CompanyCard
-              key={company.handle}
-              handle={company.handle}
-              name={company.name}
-              description={company.description}
-            />
-          ))
-        ) : (
-          <p>No companies found.</p>
-        )}
-      </div>
+      <input
+        type="text"
+        placeholder="Search companies..."
+        value={searchTerm}
+        onChange={handleSearchChange}
+      />
+      {companies.length ? (
+        companies.map(company => (
+          <CompanyCard
+            key={company.handle}
+            handle={company.handle}
+            name={company.name}
+            description={company.description}
+          />
+        ))
+      ) : (
+        <p>No companies found.</p>
+      )}
     </div>
   );
 };
