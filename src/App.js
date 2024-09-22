@@ -1,39 +1,94 @@
-import React from 'react';
-import { Route, Switch } from 'react-router-dom';
-import HomePage from './components/HomePage';
-import CompaniesPage from './components/CompaniesPage';
-import JobsPage from './components/JobsPage';
-import LoginPage from './components/LoginPage';
-import SignupPage from './components/SignupPage';  // Create if not already made
-import ProfilePage from './components/ProfilePage';  // Create if not already made
-import CompanyDetailPage from './components/CompanyDetailPage'; 
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';  // jwt-decode instead of destructuring
+import JoblyApi from './api';  // Your API helper for backend interactions
+import AppRoutes from './Routes';  // Your routes for navigation
+import NavBar from './components/NavBar';  // Navigation bar
+import useLocalStorage from './hooks/useLocalStorage';  // Custom localStorage hook
 
-function AppRoutes({ login, signup, currentUser, updateProfile }) {
+function App() {
+  // Manage token with localStorage, so user remains logged in between sessions
+  const [token, setToken] = useLocalStorage("token", null);  
+  const [currentUser, setCurrentUser] = useState(null);  // Store the logged-in user's data
+  const [isLoading, setIsLoading] = useState(false);  // Manage loading state
+
+  // Effect to load the current user whenever the token changes
+  useEffect(() => {
+    async function loadUser() {
+      if (token) {
+        try {
+          const { username } = jwtDecode(token);  // Decode the JWT to get username
+          JoblyApi.saveToken(token);  // Save token to JoblyApi for API requests
+          const user = await JoblyApi.getCurrentUser(username);  // Fetch current user info from backend
+          setCurrentUser(user);  // Set user data in state
+        } catch (err) {
+          console.error("Error loading user", err);
+          setCurrentUser(null);  // Reset current user on error
+        }
+      } else {
+        setCurrentUser(null);  // Reset current user if no token
+      }
+      setIsLoading(false);
+    }
+
+    setIsLoading(true);
+    loadUser();
+  }, [token]);  // Trigger this effect whenever the token changes
+
+  // Login function
+  async function login(data) {
+    try {
+      const token = await JoblyApi.login(data);  // Get token from login API call
+      setToken(token);  // Save token in state and localStorage
+    } catch (err) {
+      console.error("Login failed", err);
+    }
+  }
+
+  // Signup function
+  async function signup(data) {
+    try {
+      const token = await JoblyApi.register(data);  // Get token from signup API call
+      setToken(token);  // Save token in state and localStorage
+    } catch (err) {
+      console.error("Signup failed", err);
+    }
+  }
+
+  // Logout function
+  function logout() {
+    setToken(null);  // Remove token and clear localStorage
+    setCurrentUser(null);  // Clear current user data
+  }
+
+  // Update Profile function
+  async function updateProfile(updatedData) {
+    try {
+      const updatedUser = await JoblyApi.updateProfile(currentUser.username, updatedData);  // Update user data
+      setCurrentUser(updatedUser);  // Update the user state
+    } catch (err) {
+      console.error("Error updating profile", err);
+      throw err;
+    }
+  }
+
+  if (isLoading) {
+    return <p>Loading...</p>;  // Show loading state while fetching data
+  }
+
   return (
-    <Switch>
-      <Route exact path="/">
-        <HomePage />
-      </Route>
-      <Route exact path="/companies">
-        <CompaniesPage />
-      </Route>
-      <Route exact path="/companies/:handle">
-        <CompanyDetailPage />
-      </Route>
-      <Route exact path="/jobs">
-        <JobsPage currentUser={currentUser} />
-      </Route>
-      <Route exact path="/login">
-        <LoginPage login={login} />
-      </Route>
-      <Route exact path="/signup">
-        <SignupPage signup={signup} />
-      </Route>
-      <Route exact path="/profile">
-        <ProfilePage currentUser={currentUser} updateProfile={updateProfile} />
-      </Route>
-    </Switch>
+    <div className="App">
+      <BrowserRouter>
+        <NavBar currentUser={currentUser} logout={logout} />  {/* Pass current user and logout function to NavBar */}
+        <AppRoutes 
+          login={login} 
+          signup={signup} 
+          currentUser={currentUser} 
+          updateProfile={updateProfile}  // Pass updateProfile to routes
+        />
+      </BrowserRouter>
+    </div>
   );
 }
 
-export default AppRoutes;
+export default App;
