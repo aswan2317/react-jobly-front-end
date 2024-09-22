@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import jwtDecode from 'jwt-decode';  // jwt-decode instead of destructuring
+import { decode as jwtDecode } from 'jwt-decode';
 import JoblyApi from './api';  // Your API helper for backend interactions
 import AppRoutes from './Routes';  // Your routes for navigation
 import NavBar from './components/NavBar';  // Navigation bar
