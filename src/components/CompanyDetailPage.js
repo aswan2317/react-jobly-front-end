@@ -2,9 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import JoblyApi from '../api';
-import CompaniesDetail from './CompaniesDetail';  // Import the subcomponent
+import CompanyDetail from './CompanyDetail';  // Import the subcomponent
 
-const CompaniesDetailPage = () => {
+const CompanyDetailPage = () => {
   const { handle } = useParams();  // Get company handle from URL
   const [company, setCompany] = useState(null);
 
@@ -25,9 +25,9 @@ const CompaniesDetailPage = () => {
 
   return (
     <div className="CompanyDetailPage">
-      <CompaniesDetail company={company} />  {/* Pass company data to subcomponent */}
+      <CompanyDetail company={company} />  {/* Pass company data to subcomponent */}
     </div>
   );
 };
 
-export default CompaniesDetailPage;
+export default CompanyDetailPage;
