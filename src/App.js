@@ -14,9 +14,11 @@ function App() {
     async function loadUser() {
       if (token) {
         try {
+          console.log("Decoding token:", token);
           const { username } = jwtDecode(token);  // Decode the token to get the username
           JoblyApi.saveToken(token);  // Save the token in JoblyApi
           const user = await JoblyApi.getCurrentUser(username);  // Fetch user info
+          console.log("Loaded user:", user);
           setCurrentUser(user);
         } catch (err) {
           console.error("Error loading user", err);
@@ -33,6 +35,7 @@ function App() {
   async function login(data) {
     try {
       const token = await JoblyApi.login(data);
+      console.log("Login successful, token:", token);
       setToken(token);  // Save token in localStorage
     } catch (err) {
       console.error("Login failed", err);
@@ -43,6 +46,7 @@ function App() {
   async function signup(data) {
     try {
       const token = await JoblyApi.register(data);
+      console.log("Signup successful, token:", token);
       setToken(token);  // Save token in localStorage
     } catch (err) {
       console.error("Signup failed", err);
@@ -51,6 +55,7 @@ function App() {
 
   // Logout function
   function logout() {
+    console.log("Logging out");
     setCurrentUser(null);
     setToken(null);  // Clear token from localStorage
   }
@@ -59,8 +64,10 @@ function App() {
   async function updateProfile(updatedData) {
     try {
       const updatedUser = await JoblyApi.updateProfile(currentUser.username, updatedData);
+      console.log("Profile updated:", updatedUser);
       setCurrentUser(updatedUser);  // Update the user state with the new data
     } catch (err) {
+      console.error("Error updating profile", err);
       throw err;
     }
   }

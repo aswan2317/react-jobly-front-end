@@ -1,4 +1,3 @@
-// src/components/LoginPage.js
 import React, { useState } from 'react';
 
 function LoginPage({ login }) {
@@ -18,19 +17,27 @@ function LoginPage({ login }) {
     <div>
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
+        {/* Add both name and id attributes */}
+        <label htmlFor="username">Username</label>
         <input
           type="text"
-          name="username"
+          id="username"
+          name="username"  // Add name attribute
           value={formData.username}
           onChange={handleChange}
           placeholder="Username"
+          autoComplete="username"  // Optional: Improve autofill experience
         />
+        
+        <label htmlFor="password">Password</label>
         <input
           type="password"
-          name="password"
+          id="password"
+          name="password"  // Add name attribute
           value={formData.password}
           onChange={handleChange}
           placeholder="Password"
+          autoComplete="current-password"  // Optional: Improve autofill experience
         />
         <button type="submit">Login</button>
       </form>
