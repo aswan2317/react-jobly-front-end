@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { decode as jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';  // Correct named export
 import JoblyApi from './api';  // Your API helper for backend interactions
 import AppRoutes from './Routes';  // Your routes for navigation
 import NavBar from './components/NavBar';  // Navigation bar
 import useLocalStorage from './hooks/useLocalStorage';  // Custom localStorage hook
 
 function App() {
-  // Manage token with localStorage, so user remains logged in between sessions
   const [token, setToken] = useLocalStorage("token", null);  
   const [currentUser, setCurrentUser] = useState(null);  // Store the logged-in user's data
   const [isLoading, setIsLoading] = useState(false);  // Manage loading state
@@ -17,7 +16,7 @@ function App() {
     async function loadUser() {
       if (token) {
         try {
-          const { username } = jwtDecode(token);  // Decode the JWT to get username
+          const { username } = jwtDecode(token);  // Correct usage of jwtDecode
           JoblyApi.saveToken(token);  // Save token to JoblyApi for API requests
           const user = await JoblyApi.getCurrentUser(username);  // Fetch current user info from backend
           setCurrentUser(user);  // Set user data in state
