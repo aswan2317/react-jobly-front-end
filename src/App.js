@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';  // Correct named export
 import JoblyApi from './api';  // Your API helper for backend interactions
 import AppRoutes from './Routes';  // Your routes for navigation
@@ -77,7 +76,6 @@ function App() {
 
   return (
     <div className="App">
-      <BrowserRouter>
         <NavBar currentUser={currentUser} logout={logout} />  {/* Pass current user and logout function to NavBar */}
         <AppRoutes 
           login={login} 
@@ -85,7 +83,6 @@ function App() {
           currentUser={currentUser} 
           updateProfile={updateProfile}  // Pass updateProfile to routes
         />
-      </BrowserRouter>
     </div>
   );
 }
