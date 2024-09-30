@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const NavBar = () => {
+const NavBar = ({currentUser,logout}) => {
   return (
     <nav>
       <Link to="/">Home</Link>
@@ -11,6 +11,7 @@ const NavBar = () => {
       <Link to="/login">Login</Link>
       <Link to="/signup">Signup</Link>
       <Link to="/profile">Profile</Link>
+      <button onClick={logout}>Logout</button>
     </nav>
   );
 };

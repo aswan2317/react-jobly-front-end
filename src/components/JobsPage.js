@@ -1,7 +1,7 @@
 // src/components/JobsPage.js
 import React, { useState, useEffect } from 'react';
 import JobCard from './JobCard';
-import JoblyApi from '../api';  // API helper
+import JoblyApi from '../api';
 
 const JobsPage = ({ currentUser }) => {
   const [jobs, setJobs] = useState([]);
@@ -50,7 +50,7 @@ const JobsPage = ({ currentUser }) => {
             salary={job.salary}
             equity={job.equity}
             companyName={job.companyName}  // Display the company name, if available
-            applied={currentUser && currentUser.jobsApplied.includes(job.id)}  // Check if user applied
+            // applied={currentUser && currentUser.jobsApplied.includes(job.id)}  // Check if user applied//////////////////////
           />
         ))
       )}

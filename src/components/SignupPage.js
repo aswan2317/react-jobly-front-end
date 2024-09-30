@@ -25,6 +25,20 @@ function SignupPage({ signup }) {
           onChange={handleChange}
           placeholder="Username"
         />
+         <input
+          type="text"
+          name="firstName"
+          value={formData.firstName}
+          onChange={handleChange}
+          placeholder="FirstName"
+        />
+         <input
+          type="text"
+          name="lastName"
+          value={formData.lastName}
+          onChange={handleChange}
+          placeholder="LastName"
+        />
         <input
           type="password"
           name="password"
